@@ -1,0 +1,447 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Fujikyu_Lib_R
+</name>
+</assembly>
+<members>
+<member name="T:Fujikyu_Lib_R.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Fujikyu_Lib_R.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Fujikyu_Lib_R.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="T:Fujikyu_Lib_R.AddressSearch.BASE">
+ <summary>
+ 検索先指定　
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.BASE.API">
+ <summary>
+ 郵便番号検索API
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.BASE.CSV">
+ <summary>
+ KEN_ALL.CSV参照
+ </summary>
+</member>
+<member name="T:Fujikyu_Lib_R.AddressSearch.LstPos">
+ <summary>
+ Resultリストの位置指定用
+ </summary>
+</member>
+<member name="T:Fujikyu_Lib_R.AddressSearch.CsvPos">
+ <summary>
+ KEN_ALL.CSVの項目位置
+ </summary>
+</member>
+<member name="T:Fujikyu_Lib_R.AddressSearch.ZIP_result">
+ <summary>
+ サーバーから返却された XML をデシリアライズするローカルクラス
+ </summary>
+</member>
+<member name="T:Fujikyu_Lib_R.AddressSearch.SrtResult">
+ <summary>
+住所検索処理の結果表示用 
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.SrtResult.I100">
+ <summary>
+ 正常終了
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.SrtResult.E100">
+ <summary>
+ Error
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.SrtResult.E101">
+ <summary>
+ 郵便番号が入力されていません
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.SrtResult.E102">
+ <summary>
+ 郵便番号が正しくありません
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.SrtResult.E103">
+ <summary>
+ 住所が見つかりませんでした
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.SrtResult.E104">
+ <summary>
+ CSVファイルが見つかりませんでした
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.SrtResult.E105">
+ <summary>
+ ネットワーク接続されているか確認してください
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.AddressSearch.SrtResult.E106">
+ <summary>
+ APIサーバーへの接続ができませんでした
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.AddressSearch.GetAddress(System.String,System.Int32)">
+ <summary>
+ 引数の文字列から住所を検索し文字列リストで返します
+ </summary>
+ <param name="zipcode">郵便番号(ﾊｲﾌﾝ無し)</param>
+ <param name="From">検索先の指定：0→API　1→CSV</param>
+ <returns>検索結果</returns>
+</member>
+<member name="M:Fujikyu_Lib_R.AddressSearch.IsInternetConnected(System.String)">
+ <summary>
+ ｲﾝﾀｰﾈｯﾄに接続されているか
+ </summary>
+ <returns>接続されているときはtrue</returns>
+</member>
+<member name="M:Fujikyu_Lib_R.AddressSearch.MakeError(System.String)">
+ <summary>
+ ｴﾗｰ用List作成
+ </summary>
+ <param name="Ename"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.InportData.ReadCsv(System.String,System.Boolean)">
+ <summary>
+ CSVファイルの読込:Datatableで渡す
+ </summary>
+ <param name="FilePath"></param>
+ <param name="HasHeader"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.ExportFiles.ExportPDF(System.String,System.Data.DataTable,System.String@)">
+ <summary>
+ 保存先、データ、使用するレポート名からPDFを出力します。
+ </summary>
+ <param name="Pad">保存先アドレス</param>
+ <param name="table">出力するデータテーブル</param>
+ <param name="CRnm">使用するクリスタルレポート名</param>
+ <param name=" SectionNm">セクションの指定(省略可)</param>>
+</member>
+<member name="M:Fujikyu_Lib_R.ExportFiles.ExportCSV(System.String,System.Data.DataTable,System.Boolean)">
+ <summary>
+ データテーブルをCSVに変換して出力
+ </summary>
+ <param name="Pad">ファイルの出力先アドレス</param>
+ <param name="Table">出力するデータのDatatable</param>
+ <param name="IsWriteHeader">列名を記載するか否か(true省略可)</param>
+</member>
+<member name="M:Fujikyu_Lib_R.ExportFiles.EncloseDoubleQuotes(System.String)">
+ <summary>
+ 文字列をダブルクォーテーションで囲む
+ </summary>
+</member>
+<member name="T:Fujikyu_Lib_R.FjkCombobox.TextAlign">
+ <summary>
+ テキストの位置
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkCombobox._TextAlignment">
+ <summary>
+ コンボボックス内のテキストの位置を決定します。
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkCombobox.#ctor">
+ <summary>
+ コントロール生成時の処理
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkCombobox.CbxDesign_DrawItem(System.Object,System.Windows.Forms.DrawItemEventArgs)">
+ <summary>
+ ドロップダウンリスト内の文字位置を調整
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkButton.DBcolor">
+ <summary>
+ 背景色退避用
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkButton.DFcolor">
+ <summary>
+ 文字色退避用
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkButton.Mhover">
+ <summary>
+ ﾏｳｽｶｰｿﾙが重なっているかの判定
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkButton._ChangeColorIfEnter">
+ <summary>
+ ﾏｳｽｶｰｿﾙが重なっている時、背景・文字色の変化するかを決定
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkButton._ChangeColorIfFocus">
+ <summary>
+ ﾌｫｰｶｽ取得時に背景・文字色の変化するかを決定
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkButton._EnterBackColor">
+ <summary>
+ マウスカーソルがコントロール内に入った時の背景色を指定します
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkButton._EnterForeColor">
+ <summary>
+ マウスカーソルがコントロール内に入った時の文字色を指定します
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkButton.Button_MouseEnter(System.Object,System.EventArgs)">
+ <summary>
+ ﾏｳｽｶｰｿﾙがﾎﾞﾀﾝ上にある時
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkButton.Button_MouseLeave(System.Object,System.EventArgs)">
+ <summary>
+ ﾏｳｽｶｰｿﾙがﾎﾞﾀﾝ上から離れた時
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkButton.Button_GotFocus(System.Object,System.EventArgs)">
+ <summary>
+ ﾌｫｰｶｽ取得時
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkButton.Button_Leave(System.Object,System.EventArgs)">
+ <summary>
+ ﾌｫｰｶｽ喪失時
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkLabel._BorderColor">
+ <summary>
+ 枠線の色を指定します。
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkLabel._BorderSize">
+ <summary>
+ 枠線の太さを決めます。※太くなるほど内側に広がります
+ </summary>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkLabel.Borderwrite">
+ <summary>
+ 枠線の表示を指定します。
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkLabel.Border.All">
+ <summary>
+ True/Falseの切替えで以下4つのプロパティを切り替える事が可能です、
+ なお4つの内1つでもFalseになると自動的にFalseに変更
+ </summary>
+ <returns></returns>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkLabel._DashDotsize">
+ <summary>
+ カスタム破線の線の長さを指定します。
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkLabel._DashStyle">
+ <summary>
+ 枠線の線のスタイルを指定します。
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkLabel.#ctor">
+ <summary>
+ 初期値の設定
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkLabel.WndProc(System.Windows.Forms.Message@)">
+ <summary>
+ WndProcメソッドオーバーライド/プロパティの情報をもとに枠線を描画
+ </summary>
+ <param name="m"></param>
+</member>
+<member name="T:Fujikyu_Lib_R.FjkLabel.CustomBorderConverter">
+ <summary>
+ プロパティの文字列とBorder型のコンバート
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkLabel.CustomBorderConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+ <summary>
+ コンバータがオブジェクトを指定した型に変換できるか（変換できる時はTrueを返す）
+ ここでは、Border型のオブジェクトには変換可能とする
+ </summary>
+ <param name="context"></param>
+ <param name="destinationType"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkLabel.CustomBorderConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object,System.Type)">
+ <summary>
+ 指定した値オブジェクトを、指定した型に変換する
+ Border型のオブジェクトをString型に変換する方法を提供する
+ </summary>
+ <param name="context"></param>
+ <param name="culture"></param>
+ <param name="value"></param>
+ <param name="destinationType"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkLabel.CustomBorderConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+ <summary>
+ コンバータが特定の型のオブジェクトをコンバータの型に変換できるか（変換できる時はTrueを返す）
+ ここでは、String型のオブジェクトなら変換可能とする
+ </summary>
+ <param name="context"></param>
+ <param name="sourceType"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkLabel.CustomBorderConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+ <summary>
+ 指定した値をコンバータの型に変換するString型のオブジェクトをBorder型に変換する方法を提供する
+ </summary>
+ <param name="context"></param>
+ <param name="culture"></param>
+ <param name="value"></param>
+ <returns></returns>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox.DBcolor">
+ <summary>
+ 背景色退避用
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox.DFcolor">
+ <summary>
+ 文字色退避用
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox.Dtype._None">
+ <summary>
+ 区別なし
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox.Dtype._String">
+ <summary>
+ 全角文字列
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox.Dtype._String_Half">
+ <summary>
+ 半角文字列
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox.Dtype._Number">
+ <summary>
+ 数値区別なし
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox.Dtype._Number_Delimited">
+ <summary>
+ 小数点付き数値
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox.Dtype._Date">
+ <summary>
+ 日付
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox._DataType">
+ <summary>
+ テキストに入力される型を指定します。
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox._EnterBackColor">
+ <summary>
+ フォーカスを取得中の背景色
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox._EnterForeColor">
+ <summary>
+ マウスカーソルがコントロール内に入った時の文字色を指定します
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkTextBox._FocusNextOnEnter">
+ <summary>
+ Enterでタブ切替え
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.EnterFocus(System.Object,System.EventArgs)">
+ <summary>
+ ﾌｫｰｶｽ取得時
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.FcTextBox_Validating(System.Object,System.ComponentModel.CancelEventArgs)">
+ <summary>
+ ﾌｫｰｶｽ喪失時・背景色文字色を戻す
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.FcTextBox_KeyPress(System.Object,System.Windows.Forms.KeyPressEventArgs)">
+ <summary>
+ ｷｰ押下時、対応した入浴制御を設定
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.FjkTextBox_TextChanged(System.Object,System.EventArgs)">
+ <summary>
+ ﾃｷｽﾄ変更時
+ </summary>
+ <param name="sener"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.#ctor">
+ <summary>
+ 初期値の設定
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.CheckTextType">
+ <summary>
+ DataTypeプロパティを元にテキストの正常性を返します
+ </summary>
+ <returns>True:異常なし｜False：異常あり</returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.CheckTextByte(System.String)">
+ <summary>
+ 文字列内に全角なら半角が、半角なら全角が混ざっていないか確認
+ </summary>
+ <param name="Check_String"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.CheckNumberDecimal(System.String)">
+ <summary>
+ 小数の入力正常性ﾁｪｯｸ
+ </summary>
+ <param name="Number"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkTextBox.CountChar(System.String,System.Char)">
+ <summary>
+ 特定の文字が何文字含まれているかを検出
+ </summary>
+ <param name="s"></param>
+ <param name="c"></param>
+ <returns></returns>
+</member>
+</members>
+</doc>
