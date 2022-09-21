@@ -1,6 +1,22 @@
 ﻿Imports System.Windows.Forms
 
 Public Class SQLGeneralrProcesser
+
+#Region "ﾒﾝﾊﾞ"
+    Private Shared _CnString As String = ""
+
+    Public Shared Property CnString() As String
+        Get
+            Return _CnString
+        End Get
+        Set(value As String)
+            _CnString = value
+        End Set
+    End Property
+
+#End Region
+
+
     ''' <summary>
     ''' DataSetにSELECT結果をﾊﾞｲﾝﾄﾞして戻す
     ''' </summary>
@@ -9,7 +25,7 @@ Public Class SQLGeneralrProcesser
     Public Shared Function SetDataSet(ByVal Sql As String) As DataSet
         Dim Rds As DataSet = Nothing
         Try
-            Using Cn As New SqlClient.SqlConnection(_Ini.CnString)
+            Using Cn As New SqlClient.SqlConnection(_CnString)
                 Using Adp As New SqlClient.SqlDataAdapter(Sql, Cn)
                     Using ds As New DataSet
                         Adp.Fill(ds)
@@ -39,7 +55,7 @@ Public Class SQLGeneralrProcesser
         Dim blnRtn As Boolean = False
 
         Try
-            Using Cn As New SqlClient.SqlConnection(_Ini.CnString)
+            Using Cn As New SqlClient.SqlConnection(_CnString)
                 Cn.Open()
                 Trn = Cn.BeginTransaction
                 Using Cmd As New SqlClient.SqlCommand(Sql, Cn, Trn)
@@ -76,7 +92,7 @@ Public Class SQLGeneralrProcesser
         Dim blnRtn As Boolean = False
 
         Try
-            Using Cn As New SqlClient.SqlConnection(_Ini.CnString)
+            Using Cn As New SqlClient.SqlConnection(_CnString)
                 Cn.Open()
                 Using Cmd As New SqlClient.SqlCommand(Sql, Cn)
                     Count = CInt(Cmd.ExecuteScalar)
@@ -111,7 +127,7 @@ Public Class SQLGeneralrProcesser
         Dim blnRtn As Boolean = False
 
         Try
-            Using Cn As New SqlClient.SqlConnection(_Ini.CnString)
+            Using Cn As New SqlClient.SqlConnection(_CnString)
                 Cn.Open()
                 Using Cmd As New SqlClient.SqlCommand(Sql, Cn)
                     Count = CInt(Cmd.ExecuteScalar)

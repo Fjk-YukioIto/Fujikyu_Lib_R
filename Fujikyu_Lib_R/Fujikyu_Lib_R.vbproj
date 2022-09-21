@@ -121,6 +121,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DisassenblingReadItems.vb" />
+    <Compile Include="SQLGeneralrProcesser.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

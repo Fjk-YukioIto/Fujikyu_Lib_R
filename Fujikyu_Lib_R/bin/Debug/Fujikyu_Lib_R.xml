@@ -443,5 +443,36 @@ Fujikyu_Lib_R
  <param name="c"></param>
  <returns></returns>
 </member>
+<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.SetDataSet(System.String)">
+ <summary>
+ DataSetにSELECT結果をﾊﾞｲﾝﾄﾞして戻す
+ </summary>
+ <param name="Sql"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.ExecuteSql(System.String)">
+ <summary>
+ 更新系のSQLを実行
+ </summary>
+ <param name="Sql"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.DupChk(System.String)">
+ <summary>
+ 重複ﾁｪｯｸ
+ </summary>
+ <param name="Sql"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.ExistChk(System.String)">
+ <summary>
+ 存在ﾁｪｯｸ
+ </summary>
+ <param name="Sql"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
 </members>
 </doc>
