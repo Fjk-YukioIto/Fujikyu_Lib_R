@@ -173,6 +173,15 @@ Public Class FjkButton
     End Sub
 
 
+    ''' <summary>
+    ''' コントロール生成時の処理
+    ''' </summary>
+    Sub New()
+
+        ' この呼び出しはデザイナーで必要です。
+        InitializeComponent()
+        Me.BackColor = Parent.BackColor
+    End Sub
 
 #End Region
 

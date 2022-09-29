@@ -16,7 +16,6 @@ Public Class ExportFiles
     ''' <param name="Pad">保存先アドレス</param>
     ''' <param name="table">出力するデータテーブル</param>
     ''' <param name="CRnm">使用するクリスタルレポート名</param>
-    ''' <param name=" SectionNm">セクションの指定(省略可)</param>>
     Public Shared Sub ExportPDF(ByVal Pad As String, ByVal table As DataTable, ByRef CRnm As String)
 
         Dim CrExportOptions As ExportOptions

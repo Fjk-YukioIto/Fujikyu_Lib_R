@@ -133,7 +133,6 @@ Fujikyu_Lib_R
  <param name="Pad">保存先アドレス</param>
  <param name="table">出力するデータテーブル</param>
  <param name="CRnm">使用するクリスタルレポート名</param>
- <param name=" SectionNm">セクションの指定(省略可)</param>>
 </member>
 <member name="M:Fujikyu_Lib_R.ExportFiles.ExportCSV(System.String,System.Data.DataTable,System.Boolean)">
  <summary>
@@ -232,6 +231,11 @@ Fujikyu_Lib_R
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkButton.#ctor">
+ <summary>
+ コントロール生成時の処理
+ </summary>
 </member>
 <member name="F:Fujikyu_Lib_R.FjkLabel._BorderColor">
  <summary>
@@ -443,6 +447,22 @@ Fujikyu_Lib_R
  <param name="c"></param>
  <returns></returns>
 </member>
+<member name="F:Fujikyu_Lib_R.SQLGeneralrProcesser.CnString">
+ <summary>
+ SQL接続情報
+ </summary>
+</member>
+<member name="T:Fujikyu_Lib_R.SQLGeneralrProcesser.CnvMode">
+ <summary>
+ SQLｺﾝﾊﾞｰｼﾞｮﾝ用
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.InitConnection(System.String)">
+ <summary>
+ 接続情報を設定
+ </summary>
+ <param name="Ini"></param>
+</member>
 <member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.SetDataSet(System.String)">
  <summary>
  DataSetにSELECT結果をﾊﾞｲﾝﾄﾞして戻す
@@ -458,19 +478,20 @@ Fujikyu_Lib_R
  <returns></returns>
  <remarks></remarks>
 </member>
-<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.DupChk(System.String)">
- <summary>
- 重複ﾁｪｯｸ
- </summary>
- <param name="Sql"></param>
- <returns></returns>
- <remarks></remarks>
-</member>
 <member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.ExistChk(System.String)">
  <summary>
  存在ﾁｪｯｸ
  </summary>
  <param name="Sql"></param>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.CnvSqlString(System.String,System.Int32)">
+ <summary>
+ SQL文字列NULL用ｺﾝﾊﾞｰｼﾞｮﾝ
+ </summary>
+ <param name="param"></param>
+ <param name="mode"></param>
  <returns></returns>
  <remarks></remarks>
 </member>

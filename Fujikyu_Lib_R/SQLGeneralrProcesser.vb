@@ -3,19 +3,40 @@
 Public Class SQLGeneralrProcesser
 
 #Region "ﾒﾝﾊﾞ"
-    Private Shared _CnString As String = ""
-
-    Public Shared Property CnString() As String
-        Get
-            Return _CnString
-        End Get
-        Set(value As String)
-            _CnString = value
-        End Set
-    End Property
+    ''' <summary>
+    ''' SQL接続情報
+    ''' </summary>
+    Private Shared CnString As String = String.Empty
 
 #End Region
 
+#Region "構造体"
+
+    ''' <summary>
+    ''' SQLｺﾝﾊﾞｰｼﾞｮﾝ用
+    ''' </summary>
+    Public Enum CnvMode
+        _WhereStr = 0
+        _WhereNum = 1
+        _Values = 2
+        _Set = 3
+        _InsNumber = 4
+        _UpdNumber = 5
+        _InsNull = 6
+        _UpdNull = 7
+    End Enum
+
+#End Region
+
+#Region "ﾒｿｯﾄﾞ"
+
+    ''' <summary>
+    ''' 接続情報を設定
+    ''' </summary>
+    ''' <param name="Ini"></param>
+    Public Shared Sub InitConnection(ByVal Ini As String)
+        CnString = Ini
+    End Sub
 
     ''' <summary>
     ''' DataSetにSELECT結果をﾊﾞｲﾝﾄﾞして戻す
@@ -25,7 +46,7 @@ Public Class SQLGeneralrProcesser
     Public Shared Function SetDataSet(ByVal Sql As String) As DataSet
         Dim Rds As DataSet = Nothing
         Try
-            Using Cn As New SqlClient.SqlConnection(_CnString)
+            Using Cn As New SqlClient.SqlConnection(CnString)
                 Using Adp As New SqlClient.SqlDataAdapter(Sql, Cn)
                     Using ds As New DataSet
                         Adp.Fill(ds)
@@ -55,7 +76,7 @@ Public Class SQLGeneralrProcesser
         Dim blnRtn As Boolean = False
 
         Try
-            Using Cn As New SqlClient.SqlConnection(_CnString)
+            Using Cn As New SqlClient.SqlConnection(CnString)
                 Cn.Open()
                 Trn = Cn.BeginTransaction
                 Using Cmd As New SqlClient.SqlCommand(Sql, Cn, Trn)
@@ -80,40 +101,6 @@ Public Class SQLGeneralrProcesser
 
     End Function
 
-    ''' <summary>
-    ''' 重複ﾁｪｯｸ
-    ''' </summary>
-    ''' <param name="Sql"></param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Shared Function DupChk(ByVal Sql As String) As Boolean
-
-        Dim Count As Integer
-        Dim blnRtn As Boolean = False
-
-        Try
-            Using Cn As New SqlClient.SqlConnection(_CnString)
-                Cn.Open()
-                Using Cmd As New SqlClient.SqlCommand(Sql, Cn)
-                    Count = CInt(Cmd.ExecuteScalar)
-                End Using
-            End Using
-
-            If Count > 0 Then
-                MessageBox.Show("該当するデータが既に存在します。", "通知",
-                                            MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1)
-            Else
-                blnRtn = True
-            End If
-
-        Catch ex As Exception
-            Throw ex
-
-        End Try
-
-        Return blnRtn
-
-    End Function
 
     ''' <summary>
     ''' 存在ﾁｪｯｸ
@@ -125,9 +112,9 @@ Public Class SQLGeneralrProcesser
 
         Dim Count As Integer
         Dim blnRtn As Boolean = False
-
+        'sqlの実行結果を読み込み
         Try
-            Using Cn As New SqlClient.SqlConnection(_CnString)
+            Using Cn As New SqlClient.SqlConnection(CnString)
                 Cn.Open()
                 Using Cmd As New SqlClient.SqlCommand(Sql, Cn)
                     Count = CInt(Cmd.ExecuteScalar)
@@ -136,17 +123,82 @@ Public Class SQLGeneralrProcesser
 
             If Count > 0 Then
                 blnRtn = True
-            Else
-                MessageBox.Show("該当するデータが存在しませんでした。", "通知",
-                                            MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1)
             End If
 
         Catch ex As Exception
             Throw ex
-
         End Try
 
         Return blnRtn
 
     End Function
+
+    ''' <summary>
+    ''' SQL文字列NULL用ｺﾝﾊﾞｰｼﾞｮﾝ
+    ''' </summary>
+    ''' <param name="param"></param>
+    ''' <param name="mode"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Shared Function CnvSqlString(ByVal param As String, ByVal mode As Integer) As String
+
+        Select Case mode
+            Case CnvMode._WhereStr
+                'WHERE句(文字列用)
+                If param = String.Empty Then
+                    Return " = ''"
+                Else
+                    Return " = '" & param & "'"
+                End If
+
+            Case CnvMode._WhereNum
+                'WHERE句(数値用)
+                Return " = " & param
+
+            Case CnvMode._Values
+                'INSERT句(文字列用)
+                If param = String.Empty Then
+                    Return " ''"
+                Else
+                    Return "'" & param & "'"
+                End If
+
+            Case CnvMode._Set
+                'UPDATE句(文字列用)
+                If param = String.Empty Then
+                    Return " = ''"
+                Else
+                    Return " = '" & param & "'"
+                End If
+
+            Case CnvMode._InsNumber
+                'INSERT句(数値用)
+                Return " " & param
+
+            Case CnvMode._UpdNumber
+                'UPDATE句(数値用)
+                If param = String.Empty Then
+                    Return " = 0"
+                Else
+                    Return " = " & param
+                End If
+
+            Case CnvMode._InsNull
+                Return " NULL"
+
+            Case CnvMode._UpdNull
+                Return " = NULL"
+
+            Case Else
+                Return ""
+
+        End Select
+
+    End Function
+
+
+
+
+#End Region
+
 End Class

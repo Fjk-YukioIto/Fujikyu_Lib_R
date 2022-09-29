@@ -22,9 +22,12 @@ Partial Class ExForm
     'コード エディターを使って変更しないでください。
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Button1 = New System.Windows.Forms.Button()
         Me.FjkButton1 = New Fujikyu_Lib_R.FjkButton()
+        Me.TimeTest = New System.Windows.Forms.Timer(Me.components)
+        Me.Panel1 = New System.Windows.Forms.Panel()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -60,12 +63,24 @@ Partial Class ExForm
         Me.FjkButton1.Text = "FjkButton1"
         Me.FjkButton1.UseVisualStyleBackColor = True
         '
+        'TimeTest
+        '
+        '
+        'Panel1
+        '
+        Me.Panel1.BackColor = System.Drawing.Color.Black
+        Me.Panel1.Location = New System.Drawing.Point(737, 323)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(95, 28)
+        Me.Panel1.TabIndex = 3
+        '
         'ExForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.ClientSize = New System.Drawing.Size(645, 467)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.FjkButton1)
         Me.Controls.Add(Me.DataGridView1)
@@ -79,4 +94,6 @@ Partial Class ExForm
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents FjkButton1 As Fujikyu_Lib_R.FjkButton
     Friend WithEvents Button1 As Button
+    Friend WithEvents TimeTest As Timer
+    Friend WithEvents Panel1 As Panel
 End Class
