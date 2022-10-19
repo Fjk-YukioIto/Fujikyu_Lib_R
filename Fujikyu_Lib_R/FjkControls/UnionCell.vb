@@ -2,17 +2,9 @@
 Imports System.Windows.Forms
 Imports System.ComponentModel
 Imports System.Drawing
+Public Class UnionCell
+    Inherits System.Windows.Forms.DataGridViewCell
 
-'Public Class HeaderCellColection
-'    Inherits System.Collections.Generic.List(Of HeaderCell)
-'End Class
-
-''' <summary>
-''' ヘッダーセル定義
-''' </summary>
-''' <remarks></remarks>
-Public Class HeaderCell
-    Inherits System.Windows.Forms.DataGridViewHeaderCell
     Private _row As Integer
     ''' <summary>
     ''' 行
@@ -177,22 +169,5 @@ Public Class HeaderCell
         End Set
     End Property
 
-    Private _sortVisible As Boolean
-    ''' <summary>
-    ''' 結合されている列に並び替えがある場合に並び替えの方向を表示する
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    <Category("表示")>
-    <Description("結合されている列に並び替えがある場合に並び替えの方向を表示する")>
-    Public Property SortVisible As Boolean
-        Get
-            Return _sortVisible
-        End Get
-        Set(ByVal value As Boolean)
-            _sortVisible = value
-        End Set
-    End Property
 
 End Class

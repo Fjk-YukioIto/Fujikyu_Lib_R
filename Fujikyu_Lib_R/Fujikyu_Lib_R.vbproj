@@ -117,6 +117,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FjkControls\HeaderCell.vb" />
+    <Compile Include="FjkControls\UnionCell.vb" />
     <Compile Include="InportData.vb" />
     <Compile Include="ExportFiles.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

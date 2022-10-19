@@ -223,13 +223,13 @@ Fujikyu_Lib_R
 </member>
 <member name="T:Fujikyu_Lib_R.FjkDataGridView.MyCollection">
  <summary>
- コレクションの設定
+ 列ヘッダ：コレクションの設定
  </summary>
  <remarks></remarks>
 </member>
 <member name="P:Fujikyu_Lib_R.FjkDataGridView.ColumnHeaderCustom">
  <summary>
- 列ヘッダのカスタマイズを適用するか判定する
+ セルのカスタマイズを適用するか判定する
  </summary>
  <returns></returns>
 </member>
@@ -263,16 +263,24 @@ Fujikyu_Lib_R
  <returns></returns>
  <remarks></remarks>
 </member>
-<member name="P:Fujikyu_Lib_R.FjkDataGridView.CellUnionMode">
+<member name="P:Fujikyu_Lib_R.FjkDataGridView.UnionCells">
  <summary>
- 結合モードの設定
+ 列ヘッダに表示するCellを設定します
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Fujikyu_Lib_R.FjkDataGridView.CellsCollection">
+ <summary>
+ セル結合：コレクションの設定
+ </summary>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkDataGridView.CellUnion">
+ <summary>
+ セル結合の適用を決定します
  </summary>
  <returns></returns>
-</member>
-<member name="T:Fujikyu_Lib_R.FjkDataGridView.UnionMode">
- <summary>
- 結合設定：Auto/自動　User/設定をユーザが渡す　None/結合しない
- </summary>
 </member>
 <member name="M:Fujikyu_Lib_R.FjkDataGridView.CopyPaste_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)">
  <summary>
@@ -455,6 +463,79 @@ Fujikyu_Lib_R
 <member name="P:Fujikyu_Lib_R.HeaderCell.SortVisible">
  <summary>
  結合されている列に並び替えがある場合に並び替えの方向を表示する
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.Row">
+ <summary>
+ 行
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.Column">
+ <summary>
+ 列
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.RowSpan">
+ <summary>
+ 結合する行数
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.ColumnSpan">
+ <summary>
+ 結合する列数
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.BackgroundColor">
+ <summary>
+ セルの背景色
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.ForeColor">
+ <summary>
+ テキストの文字色
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.Text">
+ <summary>
+ セルに関連付けられたテキスト
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.TextAlign">
+ <summary>
+ 結合されたセル内でのテキストの位置
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.UnionCell.WrapMode">
+ <summary>
+ セルに含まれるテキスト形式の内容が 1 行に収まらないほど長い場合に、次の行に折り返されるか、
+ 切り捨てられるかを示す値を取得または設定する
  </summary>
  <value></value>
  <returns></returns>
