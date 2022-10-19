@@ -172,7 +172,6 @@ Public Class FjkButton
         InFocus = False
     End Sub
 
-
     ''' <summary>
     ''' コントロール生成時の処理
     ''' </summary>
@@ -180,7 +179,7 @@ Public Class FjkButton
 
         ' この呼び出しはデザイナーで必要です。
         InitializeComponent()
-        Me.BackColor = Parent.BackColor
+
     End Sub
 
 #End Region
@@ -191,7 +190,6 @@ Public Class FjkButton
 
         'カスタム描画コードをここに追加します。
     End Sub
-
 
 #End Region
 

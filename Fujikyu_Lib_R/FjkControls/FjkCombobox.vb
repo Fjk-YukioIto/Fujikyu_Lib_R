@@ -2,7 +2,6 @@
 Imports System.Drawing
 Imports System.ComponentModel
 Public Class FjkCombobox
-
 #Region "ﾒﾝﾊﾞ"
 
     ''' <summary>

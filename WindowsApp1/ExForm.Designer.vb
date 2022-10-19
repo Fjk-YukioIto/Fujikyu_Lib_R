@@ -23,77 +23,77 @@ Partial Class ExForm
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.FjkBarCordReader1 = New Fujikyu_Lib_R.FjkBarCordReader()
+        Me.FjkDataGridView1 = New Fujikyu_Lib_R.FjkDataGridView()
         Me.FjkButton1 = New Fujikyu_Lib_R.FjkButton()
-        Me.TimeTest = New System.Windows.Forms.Timer(Me.components)
-        Me.Panel1 = New System.Windows.Forms.Panel()
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.FjkDataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
-        '
-        'DataGridView1
-        '
-        Me.DataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView1.Location = New System.Drawing.Point(12, 12)
-        Me.DataGridView1.Name = "DataGridView1"
-        Me.DataGridView1.RowTemplate.Height = 21
-        Me.DataGridView1.Size = New System.Drawing.Size(426, 297)
-        Me.DataGridView1.TabIndex = 2
-        Me.DataGridView1.TabStop = False
         '
         'Button1
         '
-        Me.Button1.Location = New System.Drawing.Point(311, 368)
+        Me.Button1.Location = New System.Drawing.Point(373, 416)
         Me.Button1.Name = "Button1"
         Me.Button1.Size = New System.Drawing.Size(127, 39)
         Me.Button1.TabIndex = 1
         Me.Button1.Text = "Button1"
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'FjkBarCordReader1
+        '
+        Me.FjkBarCordReader1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.FjkBarCordReader1.Location = New System.Drawing.Point(461, 12)
+        Me.FjkBarCordReader1.Name = "FjkBarCordReader1"
+        Me.FjkBarCordReader1.Size = New System.Drawing.Size(221, 211)
+        Me.FjkBarCordReader1.TabIndex = 5
+        '
+        'FjkDataGridView1
+        '
+        Me.FjkDataGridView1.CellUnionMode = Fujikyu_Lib_R.FjkDataGridView.UnionMode.[Auto]
+        Me.FjkDataGridView1.ColumnHeaderBorderStyle = Fujikyu_Lib_R.FjkDataGridView.HeaderCellBorderStyle.SingleLine
+        Me.FjkDataGridView1.ColumnHeaderCustom = False
+        Me.FjkDataGridView1.ColumnHeaderRowCount = 1
+        Me.FjkDataGridView1.ColumnHeaderRowHeight = 17
+        Me.FjkDataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.FjkDataGridView1.Location = New System.Drawing.Point(12, 12)
+        Me.FjkDataGridView1.Name = "FjkDataGridView1"
+        Me.FjkDataGridView1.RowTemplate.Height = 21
+        Me.FjkDataGridView1.Size = New System.Drawing.Size(428, 303)
+        Me.FjkDataGridView1.TabIndex = 4
+        '
         'FjkButton1
         '
         Me.FjkButton1.ChangeColorIfEnter = False
-        Me.FjkButton1.ChangeColorIfFocus = True
-        Me.FjkButton1.EnterBackColor = System.Drawing.Color.Gray
-        Me.FjkButton1.EnterForeColor = System.Drawing.Color.White
-        Me.FjkButton1.Location = New System.Drawing.Point(451, 359)
+        Me.FjkButton1.ChangeColorIfFocus = False
+        Me.FjkButton1.EnterBackColor = System.Drawing.SystemColors.Control
+        Me.FjkButton1.EnterForeColor = System.Drawing.Color.Empty
+        Me.FjkButton1.Location = New System.Drawing.Point(506, 416)
         Me.FjkButton1.Name = "FjkButton1"
-        Me.FjkButton1.Size = New System.Drawing.Size(141, 56)
-        Me.FjkButton1.TabIndex = 0
+        Me.FjkButton1.Size = New System.Drawing.Size(127, 39)
+        Me.FjkButton1.TabIndex = 3
         Me.FjkButton1.Text = "FjkButton1"
         Me.FjkButton1.UseVisualStyleBackColor = True
-        '
-        'TimeTest
-        '
-        '
-        'Panel1
-        '
-        Me.Panel1.BackColor = System.Drawing.Color.Black
-        Me.Panel1.Location = New System.Drawing.Point(737, 323)
-        Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(95, 28)
-        Me.Panel1.TabIndex = 3
         '
         'ExForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 12.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.Color.White
-        Me.ClientSize = New System.Drawing.Size(645, 467)
-        Me.Controls.Add(Me.Panel1)
-        Me.Controls.Add(Me.Button1)
+        Me.BackColor = System.Drawing.SystemColors.Control
+        Me.ClientSize = New System.Drawing.Size(706, 487)
+        Me.Controls.Add(Me.FjkBarCordReader1)
+        Me.Controls.Add(Me.FjkDataGridView1)
         Me.Controls.Add(Me.FjkButton1)
-        Me.Controls.Add(Me.DataGridView1)
+        Me.Controls.Add(Me.Button1)
         Me.Name = "ExForm"
         Me.Text = "Form1"
-        CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.FjkDataGridView1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
-
-    Friend WithEvents DataGridView1 As DataGridView
-    Friend WithEvents FjkButton1 As Fujikyu_Lib_R.FjkButton
     Friend WithEvents Button1 As Button
-    Friend WithEvents TimeTest As Timer
-    Friend WithEvents Panel1 As Panel
+    Friend WithEvents FjkButton1 As Fujikyu_Lib_R.FjkButton
+    Friend WithEvents FjkDataGridView1 As Fujikyu_Lib_R.FjkDataGridView
+    Friend WithEvents FjkBarCordReader1 As Fujikyu_Lib_R.FjkBarCordReader
 End Class

@@ -8,18 +8,23 @@ Fujikyu_Lib_R
 <members>
 <member name="T:Fujikyu_Lib_R.My.Resources.Resources">
 <summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
+  ローカライズされた文字列などを検索するための、厳密に型指定されたリソース クラスです。
 </summary>
 </member>
 <member name="P:Fujikyu_Lib_R.My.Resources.Resources.ResourceManager">
 <summary>
-  Returns the cached ResourceManager instance used by this class.
+  このクラスで使用されているキャッシュされた ResourceManager インスタンスを返します。
 </summary>
 </member>
 <member name="P:Fujikyu_Lib_R.My.Resources.Resources.Culture">
 <summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
+  すべてについて、現在のスレッドの CurrentUICulture プロパティをオーバーライドします
+  現在のスレッドの CurrentUICulture プロパティをオーバーライドします。
+</summary>
+</member>
+<member name="P:Fujikyu_Lib_R.My.Resources.Resources.QRsample">
+<summary>
+  型 System.Drawing.Bitmap のローカライズされたリソースを検索します。
 </summary>
 </member>
 <member name="T:Fujikyu_Lib_R.AddressSearch.BASE">
@@ -117,6 +122,343 @@ Fujikyu_Lib_R
  </summary>
  <param name="Ename"></param>
  <returns></returns>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.DobCheck">
+ <summary>
+ 二重取込ﾁｪｯｸ用ﾘｽﾄ
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.CamWidth">
+ <summary>
+ ｶﾒﾗｻｲｽﾞ幅
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.CamHeight">
+ <summary>
+ ｶﾒﾗｻｲｽﾞ高さ
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.Frame">
+ <summary>
+ ﾌﾚｰﾑ情報
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.Bmp">
+ <summary>
+ 画像情報
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.Graph">
+ <summary>
+ 描画用
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.Captures">
+ <summary>
+ｶﾒﾗの検出
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.Dcolor">
+ <summary>
+ ﾃﾞﾌｫﾙﾄｶﾗｰ退避用
+ </summary>
+</member>
+<member name="F:Fujikyu_Lib_R.FjkBarCordReader.reader">
+ <summary>
+ ﾊﾞｰｺｰﾄﾞ/QR分解能
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.FjkBarCordReader_Sizechanged(System.Object,System.EventArgs)">
+ <summary>
+ ｺﾝﾄﾛｰﾙのｻｲｽﾞが変更された時
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.BackgroundRead_ProgressChanged(System.Object,System.ComponentModel.ProgressChangedEventArgs)">
+ <summary>
+ ﾊﾞｯｸｸﾞﾗｳﾝﾄﾞ処理が更新された場合
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.BackgroundRead_DoWork(System.Object,System.ComponentModel.DoWorkEventArgs)">
+ <summary>
+ ﾊﾞｯｸｸﾞﾗｳﾝﾄﾞ処理の実行
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.Timer1_Tick(System.Object,System.EventArgs)">
+ <summary>
+ ﾀｲﾏｰ経過時
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.Init_Reader">
+ <summary>
+ 読込機能の初期化・起動
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.BarCordReadSingle">
+ <summary>
+ 単体読込処理
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.BarCordReadMultiple">
+ <summary>
+ 複数同時読込処理
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkDataGridView.HeaderCells">
+ <summary>
+ 列ヘッダに表示するCellを設定します
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Fujikyu_Lib_R.FjkDataGridView.MyCollection">
+ <summary>
+ コレクションの設定
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkDataGridView.ColumnHeaderCustom">
+ <summary>
+ 列ヘッダのカスタマイズを適用するか判定する
+ </summary>
+ <returns></returns>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkDataGridView.ColumnHeaderRowCount">
+ <summary>
+ 列ヘッダーの行数を設定します
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkDataGridView.ColumnHeaderRowHeight">
+ <summary>
+ 列ヘッダに表示する行の高さ
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="T:Fujikyu_Lib_R.FjkDataGridView.HeaderCellBorderStyle">
+ <summary>
+ 列ヘッダーの境界線の種類
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkDataGridView.ColumnHeaderBorderStyle">
+ <summary>
+ 列ヘッダーの線種
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.FjkDataGridView.CellUnionMode">
+ <summary>
+ 結合モードの設定
+ </summary>
+ <returns></returns>
+</member>
+<member name="T:Fujikyu_Lib_R.FjkDataGridView.UnionMode">
+ <summary>
+ 結合設定：Auto/自動　User/設定をユーザが渡す　None/結合しない
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.CopyPaste_KeyDown(System.Object,System.Windows.Forms.KeyEventArgs)">
+ <summary>
+ ｼｮｰﾄｶｯﾄｷｰの操作を実装
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.InitLayout">
+ <summary>
+ ｺﾝﾄﾛｰﾙが追加された時
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.ContextMenuCopy_Click(System.Object,System.EventArgs)">
+ <summary>
+ ｺﾝﾃｷｽﾄﾒﾆｭｰのｺﾋﾟｰ選択時
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.SetClipDataToDGV">
+ <summary>
+ ClipBoardのﾃﾞｰﾀをDataGridViewに貼付け
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.CutDataFromDGV">
+ <summary>
+ DataGridViewからﾃﾞｰﾀをｺﾋﾟｰしｺﾋﾟｰ元は削除する
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.SeparateTexttoData(System.String)">
+ <summary>
+ 貼付け用にｸﾘｯﾌﾟﾎﾞｰﾄﾞのﾃﾞｰﾀを分解
+ </summary>
+ <param name="Pdata"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.OnPaint(System.Windows.Forms.PaintEventArgs)">
+ <summary>
+ 再描画をするとき
+ </summary>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.GetTextFormatFlags(System.Windows.Forms.DataGridViewContentAlignment,System.Windows.Forms.DataGridViewTriState)">
+ <summary>
+ 指定のスタイルから描写するテキストのスタイルを取得する
+ </summary>
+ <param name="alignment">テキストのスタイル</param>
+ <param name="wrapMode">折り返</param>
+ <remarks>描写するテキストのスタイル</remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.InvalidateUnitColumns">
+ <summary>
+ セルを結合する対象の列の描画領域の無効化
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.OnScroll(System.Windows.Forms.ScrollEventArgs)">
+ <summary>
+ スクロールが実行されたとき
+ </summary>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.OnSizeChanged(System.EventArgs)">
+ <summary>
+ サイズが変更されたとき
+ </summary>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.OnColumnWidthChanged(System.Windows.Forms.DataGridViewColumnEventArgs)">
+ <summary>
+ 列の幅が変更されたとき
+ </summary>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.OnRowDividerDoubleClick(System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs)">
+ <summary>
+ 行の境界線がダブルクリックされた時
+ </summary>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ マウスのボタンが押された時
+ </summary>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.OnMouseUp(System.Windows.Forms.MouseEventArgs)">
+ <summary>
+ マウスのボタンが離された時
+ </summary>
+ <param name="e"></param>
+ <remarks></remarks>
+</member>
+<member name="T:Fujikyu_Lib_R.HeaderCell">
+ <summary>
+ ヘッダーセル定義
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.Row">
+ <summary>
+ 行
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.Column">
+ <summary>
+ 列
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.RowSpan">
+ <summary>
+ 結合する行数
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.ColumnSpan">
+ <summary>
+ 結合する列数
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.BackgroundColor">
+ <summary>
+ セルの背景色
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.ForeColor">
+ <summary>
+ テキストの文字色
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.Text">
+ <summary>
+ セルに関連付けられたテキスト
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.TextAlign">
+ <summary>
+ 結合されたセル内でのテキストの位置
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.WrapMode">
+ <summary>
+ セルに含まれるテキスト形式の内容が 1 行に収まらないほど長い場合に、次の行に折り返されるか、
+ 切り捨てられるかを示す値を取得または設定する
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
+</member>
+<member name="P:Fujikyu_Lib_R.HeaderCell.SortVisible">
+ <summary>
+ 結合されている列に並び替えがある場合に並び替えの方向を表示する
+ </summary>
+ <value></value>
+ <returns></returns>
+ <remarks></remarks>
 </member>
 <member name="M:Fujikyu_Lib_R.InportData.ReadCsv(System.String,System.Boolean)">
  <summary>
@@ -401,7 +743,7 @@ Fujikyu_Lib_R
 </member>
 <member name="M:Fujikyu_Lib_R.FjkTextBox.FcTextBox_KeyPress(System.Object,System.Windows.Forms.KeyPressEventArgs)">
  <summary>
- ｷｰ押下時、対応した入浴制御を設定
+ ｷｰ押下時、対応した入力制御を設定
  </summary>
  <param name="sender"></param>
  <param name="e"></param>
@@ -447,30 +789,25 @@ Fujikyu_Lib_R
  <param name="c"></param>
  <returns></returns>
 </member>
-<member name="F:Fujikyu_Lib_R.SQLGeneralrProcesser.CnString">
+<member name="F:Fujikyu_Lib_R.SQLGeneralProcesser.CnString">
  <summary>
  SQL接続情報
  </summary>
 </member>
-<member name="T:Fujikyu_Lib_R.SQLGeneralrProcesser.CnvMode">
- <summary>
- SQLｺﾝﾊﾞｰｼﾞｮﾝ用
- </summary>
-</member>
-<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.InitConnection(System.String)">
+<member name="M:Fujikyu_Lib_R.SQLGeneralProcesser.InitConnection(System.String)">
  <summary>
  接続情報を設定
  </summary>
  <param name="Ini"></param>
 </member>
-<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.SetDataSet(System.String)">
+<member name="M:Fujikyu_Lib_R.SQLGeneralProcesser.SetDataSet(System.String)">
  <summary>
  DataSetにSELECT結果をﾊﾞｲﾝﾄﾞして戻す
  </summary>
  <param name="Sql"></param>
  <remarks></remarks>
 </member>
-<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.ExecuteSql(System.String)">
+<member name="M:Fujikyu_Lib_R.SQLGeneralProcesser.ExecuteSql(System.String)">
  <summary>
  更新系のSQLを実行
  </summary>
@@ -478,20 +815,11 @@ Fujikyu_Lib_R
  <returns></returns>
  <remarks></remarks>
 </member>
-<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.ExistChk(System.String)">
+<member name="M:Fujikyu_Lib_R.SQLGeneralProcesser.ExistChk(System.String)">
  <summary>
  存在ﾁｪｯｸ
  </summary>
  <param name="Sql"></param>
- <returns></returns>
- <remarks></remarks>
-</member>
-<member name="M:Fujikyu_Lib_R.SQLGeneralrProcesser.CnvSqlString(System.String,System.Int32)">
- <summary>
- SQL文字列NULL用ｺﾝﾊﾞｰｼﾞｮﾝ
- </summary>
- <param name="param"></param>
- <param name="mode"></param>
  <returns></returns>
  <remarks></remarks>
 </member>

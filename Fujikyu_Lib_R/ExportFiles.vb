@@ -94,7 +94,7 @@ Public Class ExportFiles
                 '既にファイルが存在していた場合
                 Dim dr As DialogResult
                 dr = MessageBox.Show(Pad & "は既に存在します。上書きしますか？", "確認",
-                                                         MessageBoxButtons.YesNoCancel,
+                                                         MessageBoxButtons.YesNo,
                                                          MessageBoxIcon.Question,
                                                          MessageBoxDefaultButton.Button2)
                 Select Case dr
@@ -103,7 +103,7 @@ Public Class ExportFiles
                         System.IO.File.Delete(Pad)
 
                 '処理を中断
-                    Case DialogResult.No, DialogResult.Cancel
+                    Case DialogResult.No
                         Exit Sub
                 End Select
             End If

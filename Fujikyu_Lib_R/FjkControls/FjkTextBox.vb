@@ -173,7 +173,7 @@ Public Class FjkTextBox
     End Sub
 
     ''' <summary>
-    ''' ｷｰ押下時、対応した入浴制御を設定
+    ''' ｷｰ押下時、対応した入力制御を設定
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
