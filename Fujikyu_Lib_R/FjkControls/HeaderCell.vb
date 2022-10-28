@@ -13,7 +13,7 @@ Imports System.Drawing
 ''' <remarks></remarks>
 Public Class HeaderCell
     Inherits System.Windows.Forms.DataGridViewHeaderCell
-    Private _row As Integer
+    Private _row As Integer = 0
     ''' <summary>
     ''' 行
     ''' </summary>
@@ -31,7 +31,7 @@ Public Class HeaderCell
         End Set
     End Property
 
-    Private _column As Integer
+    Private _column As Integer = 0
     ''' <summary>
     ''' 列
     ''' </summary>
@@ -140,13 +140,13 @@ Public Class HeaderCell
         End Set
     End Property
 
-    Private _textAlign As DataGridViewContentAlignment
+    Private _textAlign As DataGridViewContentAlignment = DataGridViewContentAlignment.MiddleCenter
     ''' <summary>
     ''' 結合されたセル内でのテキストの位置
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
-    ''' <remarks></remarks>
+    ''' <remarks></remarks> 
     <Category("表示")>
     <Description("結合されたセル内のテキストの位置を決定します")>
     Public Property TextAlign As DataGridViewContentAlignment

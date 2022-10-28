@@ -196,9 +196,14 @@ Fujikyu_Lib_R
  <param name="sender"></param>
  <param name="e"></param>
 </member>
-<member name="M:Fujikyu_Lib_R.FjkBarCordReader.Init_Reader">
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.Start_Reader">
  <summary>
  読込機能の初期化・起動
+ </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkBarCordReader.Stop_Reader">
+ <summary>
+ 読込機能の停止
  </summary>
 </member>
 <member name="M:Fujikyu_Lib_R.FjkBarCordReader.BarCordReadSingle">
@@ -265,7 +270,7 @@ Fujikyu_Lib_R
 </member>
 <member name="P:Fujikyu_Lib_R.FjkDataGridView.UnionCells">
  <summary>
- 列ヘッダに表示するCellを設定します
+ セルを指定して結合表示します
  </summary>
  <value></value>
  <returns></returns>
@@ -293,6 +298,13 @@ Fujikyu_Lib_R
  <summary>
  ｺﾝﾄﾛｰﾙが追加された時
  </summary>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.DataGridView_CellPainting(System.Object,System.Windows.Forms.DataGridViewCellPaintingEventArgs)">
+ <summary>
+ ｾﾙ描画
+ </summary>
+ <param name="sender"></param>
+ <param name="e"></param>
 </member>
 <member name="M:Fujikyu_Lib_R.FjkDataGridView.ContextMenuCopy_Click(System.Object,System.EventArgs)">
  <summary>
@@ -381,6 +393,30 @@ Fujikyu_Lib_R
  <param name="e"></param>
  <remarks></remarks>
 </member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.CheckUnionArea(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+ <summary>
+ セル結合の四隅のセルであるか判断
+ </summary>
+ <param name="CellRow"></param>
+ <param name="CellColumn"></param>
+ <param name="UnionRow"></param>
+ <param name="UnionColumn"></param>
+ <param name="RowSpan"></param>
+ <param name="ColumnSpan"></param>
+ <returns></returns>
+</member>
+<member name="M:Fujikyu_Lib_R.FjkDataGridView.CheckIndex(System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+ <summary>
+ 結合領域内に存在するかﾁｪｯｸ
+ </summary>
+ <param name="CellRow"></param>
+ <param name="CellColumn"></param>
+ <param name="UnionRow"></param>
+ <param name="UnionColumn"></param>
+ <param name="RowSpan"></param>
+ <param name="ColumnSpan"></param>
+ <returns></returns>
+</member>
 <member name="T:Fujikyu_Lib_R.HeaderCell">
  <summary>
  ヘッダーセル定義
@@ -449,7 +485,7 @@ Fujikyu_Lib_R
  </summary>
  <value></value>
  <returns></returns>
- <remarks></remarks>
+ <remarks></remarks> 
 </member>
 <member name="P:Fujikyu_Lib_R.HeaderCell.WrapMode">
  <summary>

@@ -112,17 +112,17 @@ Public Class FjkBarCordReader
     ''' <summary>
     ''' 読込機能の初期化・起動
     ''' </summary>
-    Public Sub Init_Reader()
+    Public Sub Start_Reader()
         If Not BackgroundRead.IsBusy Then
-            'カメラの認識：一通り確認して認識できなかった場合エラー
-            For i = 0 To 20
+            'カメラの認識：一通り確認して起動できなかった場合エラー
+            For i = 0 To 30
                 Captures = New VideoCapture(i)
                 If Captures.IsOpened Then
                     Exit For
                 End If
             Next
             If Not Captures.IsOpened Then
-                MessageBox.Show("カメラを認識出来ませんでした")
+                MessageBox.Show("カメラを起動出来ませんでした")
                 Exit Sub
             Else
                 Captures.FrameWidth = CamWidth
@@ -133,15 +133,33 @@ Public Class FjkBarCordReader
             Frame = New Mat(CamHeight, CamWidth, MatType.CV_8UC3)
             '表示用のBitmat作成
             Bmp = New Bitmap(Frame.Cols, Frame.Rows, CInt(Frame.Step()), Imaging.PixelFormat.Format24bppRgb, Frame.Data)
-
             '描画用のGraphics作成
             Graph = PB_Reader.CreateGraphics()
 
+            'チラつき防止で初期画像を非表示
             PB_Reader.Image = Nothing
+
             'カメラ描画開始
             BackgroundRead.WorkerReportsProgress = True
             BackgroundRead.WorkerSupportsCancellation = True
             BackgroundRead.RunWorkerAsync()
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' 読込機能の停止
+    ''' </summary>
+    Public Sub Stop_Reader()
+        'ﾊﾞｯｸｸﾞﾗｳﾝﾄﾞ処理の中止：処理中の場合完了まで待機
+        If BackgroundRead.IsBusy Then
+            BackgroundRead.CancelAsync()
+            While BackgroundRead.IsBusy
+                Application.DoEvents()
+            End While
+            '初期画像を表示
+            PB_Reader.Image = My.Resources.QRsample
+            'カメラ停止
+            Captures.Dispose()
         End If
     End Sub
 
@@ -151,40 +169,45 @@ Public Class FjkBarCordReader
     ''' <returns></returns>
     Public Function BarCordReadSingle() As String
         Dim StrResult As String = "Error"
+
+        '読込機能が起動していない場合エラーを返答
         If BackgroundRead.IsBusy Then
             Try
                 Dim im As Image = Bmp
                 ' コードの解析
                 Dim result As ZXing.Result = reader.Decode(TryCast(im, Bitmap))
                 Dcolor = Me.BackColor
+                '読込結果の判別
                 If (result IsNot Nothing) Then
-                    ' 結果をTextBoxコントロール「BarcodeFormatText」／「TextText」に表示
-                    'Me.Label1.Text = result.BarcodeFormat.ToString()
                     '二重取込ﾁｪｯｸ
                     If DobCheck.Contains(result.Text) Then
-                        StrResult = "Double Capture"
                         Me.BackColor = Color.Red
+                        StrResult = "Double Capture"
                         MessageBox.Show("すでに取込まれたデータです", "二重取込み", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Else
+
+                    Else '二重取込がない場合
                         DobCheck.Add(result.Text)
                         Me.BackColor = Color.Lime
                         StrResult = result.Text
 
                     End If
 
-                Else
-                    StrResult = "Not Found"
+                Else '読込結果が存在しない場合
                     Me.BackColor = Color.Red
+                    StrResult = "Not Found"
+
                 End If
+                '0.2秒取込成否の背景色描画
                 Timer1.Interval = 200
                 Timer1.Start()
+
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
 
             End Try
         End If
-        Return StrResult
 
+        Return StrResult
 
     End Function
 
@@ -193,48 +216,55 @@ Public Class FjkBarCordReader
     ''' </summary>
     ''' <returns></returns>
     Public Function BarCordReadMultiple() As List(Of String)
-        Dim StockResult As New List(Of String) From {
-            "Error"
-        }
+        Dim StockResult As New List(Of String) From {"Error"}
+
+        '読込機能が起動していない場合エラーを返答
         If BackgroundRead.IsBusy Then
             StockResult.Clear()
 
             Try
                 Dim im As Image = Bmp
+                Dim NowDob As New HashSet(Of String)
                 ' コードの解析
                 Dim result() As ZXing.Result = reader.DecodeMultiple(TryCast(im, Bitmap))
                 Dcolor = Me.BackColor
                 If (result IsNot Nothing) Then
-                    ' 結果をTextBoxコントロール「BarcodeFormatText」／「TextText」に表示
-                    'Me.Label1.Text = result.BarcodeFormat.ToString()
                     Dim dob As Boolean = False
-
+                    '二重取込ﾁｪｯｸ
                     For i = 0 To result.Count - 1
-                        If DobCheck.Contains(result(i).Text) Then dob = True
+                        If DobCheck.Contains(result(i).Text) Or (NowDob.Add(result(i).Text) = False) Then
+                            dob = True
+                            Exit For
+                        End If
                     Next
 
+                    '二重取込が存在した場合
                     If dob Then
                         Me.BackColor = Color.Red
                         StockResult.Add("Double Capture")
                         MessageBox.Show("すでに取込まれたデータが含まれています", "二重取込み", MessageBoxButtons.OK, MessageBoxIcon.Error)
-                    Else
 
+                    Else '二重取込が存在しない場合
+                        Me.BackColor = Color.Lime
                         For i = 0 To result.Count - 1
                             StockResult.Add(result(i).Text)
                             DobCheck.Add(result(i).Text)
                         Next
 
-                        Me.BackColor = Color.Lime
                     End If
                 Else
                     Me.BackColor = Color.Red
                 End If
+
+                '0.2秒読込成否を背景色描画
                 Timer1.Interval = 200
                 Timer1.Start()
+
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
 
             Finally
+                '読込結果が存在しない場合
                 If StockResult.Count = 0 Then StockResult.Add("Not Found")
             End Try
         End If

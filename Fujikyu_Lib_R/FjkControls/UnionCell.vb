@@ -5,7 +5,7 @@ Imports System.Drawing
 Public Class UnionCell
     Inherits System.Windows.Forms.DataGridViewCell
 
-    Private _row As Integer
+    Private _row As Integer = 0
     ''' <summary>
     ''' 行
     ''' </summary>
@@ -23,7 +23,7 @@ Public Class UnionCell
         End Set
     End Property
 
-    Private _column As Integer
+    Private _column As Integer = 0
     ''' <summary>
     ''' 列
     ''' </summary>
@@ -113,8 +113,7 @@ Public Class UnionCell
         End Set
     End Property
 
-
-    Private _text As String
+    Private _text As String = String.Empty
     ''' <summary>
     ''' セルに関連付けられたテキスト
     ''' </summary>
@@ -132,7 +131,7 @@ Public Class UnionCell
         End Set
     End Property
 
-    Private _textAlign As DataGridViewContentAlignment
+    Private _textAlign As DataGridViewContentAlignment = DataGridViewContentAlignment.NotSet
     ''' <summary>
     ''' 結合されたセル内でのテキストの位置
     ''' </summary>
@@ -168,6 +167,5 @@ Public Class UnionCell
             _wrapMode = value
         End Set
     End Property
-
 
 End Class

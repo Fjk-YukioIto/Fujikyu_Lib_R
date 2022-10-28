@@ -6,7 +6,6 @@ Imports System.Drawing
 Public Class FjkDataGridView
     Inherits System.Windows.Forms.DataGridView
 
-
 #Region "ﾒﾝﾊﾞ"
 
 #Region "列ﾍｯﾀﾞ"
@@ -160,10 +159,11 @@ Public Class FjkDataGridView
 
 #End Region
 
+#Region "ｾﾙ結合"
 
     Private _Cells As New CellsCollection(Me)
     ''' <summary>
-    ''' 列ヘッダに表示するCellを設定します
+    ''' セルを指定して結合表示します
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
@@ -210,7 +210,7 @@ Public Class FjkDataGridView
 
     End Class
 
-    Private _cellUnionMode As Boolean = False
+    Private _cellUnion As Boolean = False
     ''' <summary>
     ''' セル結合の適用を決定します
     ''' </summary>
@@ -219,21 +219,16 @@ Public Class FjkDataGridView
     <Description("セル結合の適用を決定します")>
     Public Property CellUnion As Boolean
         Get
-            Return _cellUnionMode
+            Return _cellUnion
         End Get
         Set(value As Boolean)
-            _cellUnionMode = value
+            _cellUnion = value
         End Set
     End Property
 
-
 #End Region
 
-#Region "構造体"
-
-
 #End Region
-
 
 #Region "ｲﾍﾞﾝﾄ"
 
@@ -265,10 +260,10 @@ Public Class FjkDataGridView
 
         End Sub
 
-        ''' <summary>
-        ''' ｺﾝﾄﾛｰﾙが追加された時
-        ''' </summary>
-        Protected Overrides Sub InitLayout()
+    ''' <summary>
+    ''' ｺﾝﾄﾛｰﾙが追加された時
+    ''' </summary>
+    Protected Overrides Sub InitLayout()
             MyBase.InitLayout()
 
             'ｺﾝﾃｷｽﾄﾒﾆｭｰを設定
@@ -277,129 +272,187 @@ Public Class FjkDataGridView
             con.Items.Add("切り取り(&X)", Nothing, New System.EventHandler(AddressOf CutDataFromDGV))
             con.Items.Add("貼り付け(&V)", Nothing, New System.EventHandler(AddressOf SetClipDataToDGV))
         Me.ContextMenuStrip = con
+
     End Sub
 
-#Region "ｾﾙ結合"
+    ''' <summary>
+    ''' ｾﾙ描画
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
     Private Sub DataGridView_CellPainting(ByVal sender As Object, ByVal e As DataGridViewCellPaintingEventArgs) Handles Me.CellPainting
         Dim dv As DataGridView = CType(sender, DataGridView)
-        If e.RowIndex < 0 OrElse e.ColumnIndex < 0 Then Exit Sub
+
+        'データグリッドビューのデータが存在していない場合処理しない
         If AllowUserToAddRows Then
             If Rows.Count <= 1 Then Exit Sub
         Else
             If Rows.Count <= 0 Then Exit Sub
         End If
-            Dim rect As Rectangle
+
+        Dim rect As Rectangle
         Dim cell As DataGridViewCell
         Dim draw As Boolean = True
+        Dim bkColor As Color = Color.Empty
+        Dim frColor As Color = Color.Empty
+        Dim Union As UnionCell
+        Dim TFflag As TextFormatFlags
 
-        If _cellUnionMode Then
+        'ｾﾙ結合を行うか判断
+        If _cellUnion Then
 
+            'セル結合を行う：UnionCellsから該当する場所で結合セルを描画
             For i = 0 To UnionCells.Count - 1
-                If e.RowIndex = UnionCells(i).Row AndAlso e.ColumnIndex = UnionCells(i).Column Then
+
+                Union = UnionCells(i)
+                '列幅・行高のいずれかが0以下の場合または
+                '列・行の位置がDataGridViewの範囲外の場合処理を飛ばす
+                If Union.RowSpan <= 0 OrElse Union.ColumnSpan <= 0 OrElse
+                    Union.Row >= dv.Rows.Count - 1 OrElse Union.Column >= dv.Columns.Count - 1 Then
+                    Continue For
+                End If
+
+                '描画するセルが結合範囲内の四つ角のどれかであるかを判断
+                If CheckUnionArea(e.RowIndex, e.ColumnIndex, Union.Row, Union.Column, Union.RowSpan, Union.ColumnSpan) Then
+
                     rect = e.CellBounds
-                    If UnionCells(i).RowSpan > 1 Then
-                        For Heightcn = 1 To UnionCells(i).RowSpan - 1
-                            cell = Me(e.ColumnIndex, e.RowIndex + Heightcn)
-                            rect.Height += cell.Size.Height
+                    '縦方向の結合
+                    If Union.RowSpan > 1 Then
+                        '高さが2以上の場合高さを加算していく
+                        For Heightcn = 1 To Union.RowSpan - 1
+
+                            If e.RowIndex = Union.Row Then
+                                '描画するセルが上端の場合：下にスライドして高さを加算
+                                If Me.Rows.Count - 1 < e.RowIndex + Heightcn Then Exit For
+                                cell = Me(e.ColumnIndex, e.RowIndex + Heightcn)
+                                rect.Height += cell.Size.Height
+
+                            ElseIf e.RowIndex = Union.Row + Union.RowSpan - 1 Then
+                                '描画するセルが下端の場合：上にスライドして高さを加算
+                                If e.RowIndex - Heightcn < 0 Then Exit For
+                                cell = Me(e.ColumnIndex, e.RowIndex - Heightcn)
+                                rect.Height += cell.Size.Height
+
+                                '座標を左上になるよう調整
+                                rect.Y -= cell.Size.Height
+                            End If
+                        Next
+                    End If
+                    '横方向の結合
+                    If UnionCells(i).ColumnSpan > 1 Then
+                        '横幅が2以上の場合幅を加算していく
+                        For Widthcn = 1 To Union.ColumnSpan - 1
+
+                            If e.ColumnIndex = Union.Column Then
+                                '描画するセルが左端の場合：右にスライドして幅を加算
+                                If Me.Columns.Count - 1 < e.ColumnIndex + Widthcn Then Exit For
+                                cell = Me(e.ColumnIndex + Widthcn, e.RowIndex)
+                                rect.Width += cell.Size.Width
+
+                            ElseIf e.ColumnIndex = Union.Column + Union.ColumnSpan - 1 Then
+                                '描画するセルが右端の場合：左にスライドして幅を加算
+                                If e.ColumnIndex - Widthcn < 0 Then Exit For
+                                cell = Me(e.ColumnIndex - Widthcn, e.RowIndex)
+                                rect.Width += cell.Size.Width
+
+                                '座標を左上になるよう調整
+                                rect.X -= cell.Size.Width
+                            End If
                         Next
                     End If
 
-                    If UnionCells(i).ColumnSpan > 1 Then
-                        For Widthcn = 1 To UnionCells(i).ColumnSpan - 1
-                            cell = Me(e.ColumnIndex + Widthcn, e.RowIndex)
-                            rect.Width += cell.Size.Width
-                        Next
-                    End If
+                    '表示位置の補正
                     rect.X -= 1
                     rect.Y -= 1
-                    e.Graphics.FillRectangle(New SolidBrush(e.CellStyle.BackColor), rect)
+                    '画面外にはみ出るとサイズ縮小
+                    'If rect.X < 0 Then
+                    '    rect.Width -= Math.Abs(rect.X)
+                    '    rect.X += Math.Abs(rect.X)
+                    'End If
+
+                    '基準となる結合セルにデータがある場合表示する
+                    Dim text As String = ""
+                    If Me(Union.Column, Union.Row).Value IsNot Nothing Then
+                        text = Me(Union.Column, Union.Row).Value.ToString
+                    ElseIf Not Union.Text = String.Empty Then
+                        text = Union.Text
+                    End If
+
+                    'UnionCellに背景色が設定されている場合反映、されていない場合セルの書式を反映
+                    bkColor = e.CellStyle.BackColor
+                    If Not Union.BackgroundColor = Color.Empty Then
+                        bkColor = Union.BackgroundColor
+                    End If
+
+                    'UnionCellに文字色が設定されている場合反映、されていない場合セルの書式を反映
+                    frColor = e.CellStyle.ForeColor
+                    If Not Union.ForeColor = Color.Empty Then
+                        frColor = Union.ForeColor
+                    End If
+
+                    'UnionCellで文字位置の設定がされている場合反映、されていない場合ﾃﾞﾌｫﾙﾄを反映
+                    Dim align As DataGridViewContentAlignment = MyBase.ColumnHeadersDefaultCellStyle.Alignment
+                    Dim wrap As DataGridViewTriState = MyBase.ColumnHeadersDefaultCellStyle.WrapMode
+
+                    If Not Union.TextAlign = DataGridViewContentAlignment.NotSet Then align = Union.TextAlign
+                    If Not Union.WrapMode = DataGridViewTriState.NotSet Then wrap = Union.WrapMode
+                    TFflag = GetTextFormatFlags(align, wrap)
+
+                    '結合セルの描画
+                    e.Graphics.FillRectangle(New SolidBrush(bkColor), rect)
                     e.Graphics.DrawRectangle(New Pen(dv.GridColor), rect)
-                    TextRenderer.DrawText(e.Graphics, e.FormattedValue.ToString(), e.CellStyle.Font, rect, e.CellStyle.ForeColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
-
-                    rect.X += rect.Width
-
-
-                    e.Graphics.FillRectangle(New SolidBrush(e.CellStyle.BackColor), rect)
-                    e.Graphics.DrawRectangle(New Pen(dv.GridColor), rect)
-                    TextRenderer.DrawText(e.Graphics, e.FormattedValue.ToString(), e.CellStyle.Font, rect, e.CellStyle.ForeColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
-
+                    TextRenderer.DrawText(e.Graphics, text, e.CellStyle.Font, rect, frColor, TFflag)
+                    e.Handled = True
 
                     draw = False
-
 
                 ElseIf CheckIndex(e.RowIndex, e.ColumnIndex, UnionCells(i).Row, UnionCells(i).Column, UnionCells(i).RowSpan, UnionCells(i).ColumnSpan) Then
+                    'セル結合の範囲内に存在する場合:背景色のみのセルを描画、本来存在していたデータは表示されない
+                    'ここがなくなるとスクロール時再描画で処理されないセルが発生し黒塗りの虫食い状態になる
+                    rect = e.CellBounds
+                    Dim width As Integer = rect.Width
+
+                    'UnionCellに背景色が設定されている場合反映、されていない場合セルの書式を反映
+                    bkColor = e.CellStyle.BackColor
+                    If Not Union.BackgroundColor = Color.Empty Then
+                        bkColor = Union.BackgroundColor
+                    End If
+
+                    '被結合セルの描画
+                    e.Graphics.FillRectangle(New SolidBrush(bkColor), rect)
+
+                    rect.X -= 1
+                    rect.Y -= 1
+                    '結合セルの左辺を描画
+                    If e.ColumnIndex = Union.Column Then
+                        e.Graphics.DrawLine(New Pen(dv.GridColor), rect.X, rect.Y, rect.X, rect.Y + rect.Height)
+                    End If
+                    '結合セルの右辺を描画
+                    If e.ColumnIndex = Union.Column + Union.ColumnSpan - 1 Then
+                        rect.X += width
+                        e.Graphics.DrawLine(New Pen(dv.GridColor), rect.X, rect.Y, rect.X, rect.Y + rect.Height)
+                    End If
+                    e.Handled = True
                     draw = False
+
                 End If
 
             Next
+            'セル結合の範囲外にある場合：通常の描画
             If draw Then e.Paint(e.ClipBounds, e.PaintParts)
             e.Handled = True
-            'If e.ColumnIndex = 0 Then
 
-
-            '    If e.RowIndex Mod 2 = 0 Then
-            '            cell = Me(e.ColumnIndex, e.RowIndex + 1)
-            '            rect.Height += cell.Size.Height
-            '        Else
-            '            'e.Paint(e.ClipBounds, e.PaintParts)
-            '            cell = Me(e.ColumnIndex, e.RowIndex - 1)
-            '            rect.Height += cell.Size.Height
-            '            rect.Y -= cell.Size.Height
-            '        End If
-
-            '        rect.X -= 1
-            '        rect.Y -= 1
-            '        e.Graphics.FillRectangle(New SolidBrush(e.CellStyle.BackColor), rect)
-            '        e.Graphics.DrawRectangle(New Pen(dv.GridColor), rect)
-            '        TextRenderer.DrawText(e.Graphics, cell.FormattedValue.ToString(), e.CellStyle.Font, rect, e.CellStyle.ForeColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
-
-
-            '        e.Handled = True
-            '    ElseIf e.ColumnIndex = 1 Then
-
-            '        If e.RowIndex Mod 2 = 0 Then
-            '            rect = e.CellBounds
-            '            cell = Me(e.ColumnIndex + 1, e.RowIndex)
-            '            rect.Width += cell.Size.Width
-            '            rect.X -= 1
-            '            rect.Y -= 1
-            '            e.Graphics.FillRectangle(New SolidBrush(e.CellStyle.BackColor), rect)
-            '            e.Graphics.DrawRectangle(New Pen(dv.GridColor), rect)
-            '            TextRenderer.DrawText(e.Graphics, e.FormattedValue.ToString(), e.CellStyle.Font, rect, e.CellStyle.ForeColor, TextFormatFlags.HorizontalCenter Or TextFormatFlags.VerticalCenter)
-            '            e.Handled = True
-            '        Else
-            '            e.Paint(e.ClipBounds, e.PaintParts)
-            '        End If
-            '    Else
-            '        If e.RowIndex Mod 2 = 0 AndAlso e.ColumnIndex = 2 Then e.Handled = True
-            '    End If
         Else
+            'セル結合を行わない：そのままセルを描画
             e.Paint(e.ClipBounds, e.PaintParts)
             e.Handled = True
         End If
 
     End Sub
 
-    Private Function CheckIndex(ByVal CellRow As Integer, ByVal CellColumn As Integer,
-                                               ByVal UnionRow As Integer, ByVal UnionColumn As Integer,
-                                               ByVal RowSpan As Integer, ByVal ColumnSpan As Integer) As Boolean
-        Dim rtn As Boolean = False
-
-        For checkR = UnionRow To UnionRow + RowSpan - 1
-            For checkC = UnionColumn To UnionColumn + ColumnSpan - 1
-                If checkC = CellColumn And checkR = CellRow Then rtn = True
-            Next
-        Next
-        Return rtn
-    End Function
-
-#End Region
-
 #End Region
 
 #Region "ﾒｿｯﾄﾞ"
-
-    'Private Sub InvalidateCells()
 
 #Region "ｺﾝﾃｷｽﾄﾒﾆｭｰ"
 
@@ -415,10 +468,10 @@ Public Class FjkDataGridView
 
         End Sub
 
-        ''' <summary>
-        ''' ClipBoardのﾃﾞｰﾀをDataGridViewに貼付け
-        ''' </summary>
-        Private Sub SetClipDataToDGV()
+    ''' <summary>
+    ''' ClipBoardのﾃﾞｰﾀをDataGridViewに貼付け
+    ''' </summary>
+    Private Sub SetClipDataToDGV()
 
             Dim Data As IDataObject = Clipboard.GetDataObject()
             If Not Data.GetDataPresent(DataFormats.Text) Or
@@ -442,10 +495,10 @@ Public Class FjkDataGridView
             Next
         End Sub
 
-        ''' <summary>
-        ''' DataGridViewからﾃﾞｰﾀをｺﾋﾟｰしｺﾋﾟｰ元は削除する
-        ''' </summary>
-        Private Sub CutDataFromDGV()
+    ''' <summary>
+    ''' DataGridViewからﾃﾞｰﾀをｺﾋﾟｰしｺﾋﾟｰ元は削除する
+    ''' </summary>
+    Private Sub CutDataFromDGV()
             If Me.DataSource Is Nothing Or Me.GetClipboardContent Is Nothing Then Exit Sub
 
             '選択されたセルをクリップボードにコピーする
@@ -455,12 +508,12 @@ Public Class FjkDataGridView
             Next
         End Sub
 
-        ''' <summary>
-        ''' 貼付け用にｸﾘｯﾌﾟﾎﾞｰﾄﾞのﾃﾞｰﾀを分解
-        ''' </summary>
-        ''' <param name="Pdata"></param>
-        ''' <returns></returns>
-        Private Function SeparateTexttoData(ByVal Pdata As String) As List(Of List(Of String))
+    ''' <summary>
+    ''' 貼付け用にｸﾘｯﾌﾟﾎﾞｰﾄﾞのﾃﾞｰﾀを分解
+    ''' </summary>
+    ''' <param name="Pdata"></param>
+    ''' <returns></returns>
+    Private Function SeparateTexttoData(ByVal Pdata As String) As List(Of List(Of String))
             Dim LineArray As String() = Pdata.Split(vbCrLf)
             Dim ReturnArray As New List(Of List(Of String))
 
@@ -478,23 +531,23 @@ Public Class FjkDataGridView
 
 #Region "ｶﾗﾑﾍｯﾀﾞｰ"
 
-        <System.Diagnostics.DebuggerNonUserCode()>
-        Public Sub New()
-            MyBase.New()
+    <System.Diagnostics.DebuggerNonUserCode()>
+    Public Sub New()
+        MyBase.New()
 
-            'この呼び出しは、コンポーネント デザイナーで必要です。
-            InitializeComponent()
+        'この呼び出しは、コンポーネント デザイナーで必要です。
+        InitializeComponent()
 
-            MyBase.DoubleBuffered = True
+        MyBase.DoubleBuffered = True
 
-        End Sub
+    End Sub
 
-        ''' <summary>
-        ''' 再描画をするとき
-        ''' </summary>
-        ''' <param name="e"></param>
-        ''' <remarks></remarks>
-        Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
+    ''' <summary>
+    ''' 再描画をするとき
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Protected Overrides Sub OnPaint(ByVal e As System.Windows.Forms.PaintEventArgs)
             MyBase.OnPaint(e)
 
             If ColumnHeaderCustom Then
@@ -508,12 +561,13 @@ Public Class FjkDataGridView
                     'ヘッダーの行の高さの取得
                     Dim rowHeight As Integer = MyBase.ColumnHeadersHeight
 
-                    If Me.ColumnHeaderRowCount > 0 Then
-                        rowHeight = MyBase.ColumnHeadersHeight / Me.ColumnHeaderRowCount
-                    End If
+                If Me.ColumnHeaderRowCount > 0 Then
+                    rowHeight = Me.ColumnHeaderRowHeight
+                    MyBase.ColumnHeadersHeight = Me.ColumnHeaderRowCount * Me.ColumnHeaderRowHeight + 2
+                End If
 
-                    '線の太さ
-                    Dim lineWidth As Integer = 1
+                '線の太さ
+                Dim lineWidth As Integer = 1
 
                     For i = 0 To ColumnCount - 1
 
@@ -766,93 +820,102 @@ Public Class FjkDataGridView
 
         End Sub
 
-        ''' <summary>
-        ''' 指定のスタイルから描写するテキストのスタイルを取得する
-        ''' </summary>
-        ''' <param name="alignment">テキストのスタイル</param>
-        ''' <param name="wrapMode">折り返</param>
-        ''' <remarks>描写するテキストのスタイル</remarks>
-        Private Function GetTextFormatFlags(ByVal alignment As DataGridViewContentAlignment,
-ByVal wrapMode As DataGridViewTriState) As TextFormatFlags
-            Try
-                ''文字の描画
-                Dim formatFlg As TextFormatFlags = TextFormatFlags.Right Or TextFormatFlags.VerticalCenter Or TextFormatFlags.EndEllipsis
+    ''' <summary>
+    ''' 指定のスタイルから描写するテキストのスタイルを取得する
+    ''' </summary>
+    ''' <param name="alignment">テキストのスタイル</param>
+    ''' <param name="wrapMode">折り返</param>
+    ''' <remarks>描写するテキストのスタイル</remarks>
+    Private Function GetTextFormatFlags(ByVal alignment As DataGridViewContentAlignment,
+                                                                ByVal wrapMode As DataGridViewTriState) As TextFormatFlags
+        Try
+            ''文字の描画
+            Dim formatFlg As TextFormatFlags = TextFormatFlags.Right Or TextFormatFlags.VerticalCenter Or TextFormatFlags.EndEllipsis
 
-                '表示位置
-                Select Case alignment
-                    Case DataGridViewContentAlignment.BottomCenter
-                        formatFlg = TextFormatFlags.Bottom Or TextFormatFlags.HorizontalCenter Or TextFormatFlags.EndEllipsis
-                    Case DataGridViewContentAlignment.BottomLeft
-                        formatFlg = TextFormatFlags.Bottom Or TextFormatFlags.Left Or TextFormatFlags.EndEllipsis
-                    Case DataGridViewContentAlignment.BottomRight
-                        formatFlg = TextFormatFlags.Bottom Or TextFormatFlags.Right Or TextFormatFlags.EndEllipsis
-                    Case DataGridViewContentAlignment.MiddleCenter
-                        formatFlg = TextFormatFlags.VerticalCenter Or TextFormatFlags.HorizontalCenter Or TextFormatFlags.EndEllipsis
-                    Case DataGridViewContentAlignment.MiddleLeft
-                        formatFlg = TextFormatFlags.VerticalCenter Or TextFormatFlags.Left Or TextFormatFlags.EndEllipsis
-                    Case DataGridViewContentAlignment.MiddleRight
-                        formatFlg = TextFormatFlags.VerticalCenter Or TextFormatFlags.Right Or TextFormatFlags.EndEllipsis
-                    Case DataGridViewContentAlignment.TopCenter
-                        formatFlg = TextFormatFlags.Top Or TextFormatFlags.HorizontalCenter Or TextFormatFlags.EndEllipsis
-                    Case DataGridViewContentAlignment.TopLeft
-                        formatFlg = TextFormatFlags.Top Or TextFormatFlags.Left Or TextFormatFlags.EndEllipsis
-                    Case DataGridViewContentAlignment.TopRight
-                        formatFlg = TextFormatFlags.Top Or TextFormatFlags.Right Or TextFormatFlags.EndEllipsis
-                End Select
+            '表示位置
+            Select Case alignment
+                Case DataGridViewContentAlignment.BottomCenter
+                    formatFlg = TextFormatFlags.Bottom Or TextFormatFlags.HorizontalCenter Or TextFormatFlags.EndEllipsis
+                Case DataGridViewContentAlignment.BottomLeft
+                    formatFlg = TextFormatFlags.Bottom Or TextFormatFlags.Left Or TextFormatFlags.EndEllipsis
+                Case DataGridViewContentAlignment.BottomRight
+                    formatFlg = TextFormatFlags.Bottom Or TextFormatFlags.Right Or TextFormatFlags.EndEllipsis
+                Case DataGridViewContentAlignment.MiddleCenter
+                    formatFlg = TextFormatFlags.VerticalCenter Or TextFormatFlags.HorizontalCenter Or TextFormatFlags.EndEllipsis
+                Case DataGridViewContentAlignment.MiddleLeft
+                    formatFlg = TextFormatFlags.VerticalCenter Or TextFormatFlags.Left Or TextFormatFlags.EndEllipsis
+                Case DataGridViewContentAlignment.MiddleRight
+                    formatFlg = TextFormatFlags.VerticalCenter Or TextFormatFlags.Right Or TextFormatFlags.EndEllipsis
+                Case DataGridViewContentAlignment.TopCenter
+                    formatFlg = TextFormatFlags.Top Or TextFormatFlags.HorizontalCenter Or TextFormatFlags.EndEllipsis
+                Case DataGridViewContentAlignment.TopLeft
+                    formatFlg = TextFormatFlags.Top Or TextFormatFlags.Left Or TextFormatFlags.EndEllipsis
+                Case DataGridViewContentAlignment.TopRight
+                    formatFlg = TextFormatFlags.Top Or TextFormatFlags.Right Or TextFormatFlags.EndEllipsis
+            End Select
 
 
-                '折り返し
-                Select Case wrapMode
-                    Case DataGridViewTriState.False
-                    Case DataGridViewTriState.NotSet
-                    Case DataGridViewTriState.True
-                        formatFlg = formatFlg Or TextFormatFlags.WordBreak
-                End Select
+            '折り返し
+            Select Case wrapMode
+                Case DataGridViewTriState.False
+                Case DataGridViewTriState.NotSet
+                Case DataGridViewTriState.True
+                    formatFlg = formatFlg Or TextFormatFlags.WordBreak
+            End Select
 
-                Return formatFlg
+            Return formatFlg
 
-            Catch ex As Exception
-                Throw
-            End Try
-        End Function
+        Catch ex As Exception
+            Throw
+        End Try
+    End Function
 
-        ''' <summary>
-        ''' セルを結合する対象の列の描画領域の無効化
-        ''' </summary>
-        ''' <remarks></remarks>
-        Private Sub InvalidateUnitColumns()
+    ''' <summary>
+    ''' セルを結合する対象の列の描画領域の無効化
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub InvalidateUnitColumns()
             Try
 
             Dim hRect As Rectangle = MyBase.DisplayRectangle
-            hRect.Height = MyBase.DisplayRectangle.Height + 1
-            MyBase.Invalidate(hRect)
+            hRect.Height = MyBase.ColumnHeadersHeight + 1
+            MyBase.Invalidate()
+
+            'For y = 0 To Me.Rows.Count - 1
+            '    For x = 0 To Me.Columns.Count - 1
+            '        MyBase.InvalidateColumn(x)
+            '    Next
+
+            '    MyBase.InvalidateRow(y)
+            'Next
 
         Catch ex As Exception
                 MessageBox.Show(ex.ToString)
             End Try
         End Sub
 
-        ''' <summary>
-        ''' スクロールが実行されたとき
-        ''' </summary>
-        ''' <param name="e"></param>
-        ''' <remarks></remarks>
-        Protected Overrides Sub OnScroll(ByVal e As System.Windows.Forms.ScrollEventArgs)
+    ''' <summary>
+    ''' スクロールが実行されたとき
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Protected Overrides Sub OnScroll(ByVal e As System.Windows.Forms.ScrollEventArgs)
             MyBase.OnScroll(e)
 
             Try
-                InvalidateUnitColumns()
-            Catch ex As Exception
+            InvalidateUnitColumns()
+            'Me.Refresh()
+        Catch ex As Exception
                 MessageBox.Show(ex.ToString)
             End Try
         End Sub
 
-        ''' <summary>
-        ''' サイズが変更されたとき
-        ''' </summary>
-        ''' <param name="e"></param>
-        ''' <remarks></remarks>
-        Protected Overrides Sub OnSizeChanged(ByVal e As System.EventArgs)
+    ''' <summary>
+    ''' サイズが変更されたとき
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Protected Overrides Sub OnSizeChanged(ByVal e As System.EventArgs)
             MyBase.OnSizeChanged(e)
 
             Try
@@ -863,12 +926,12 @@ ByVal wrapMode As DataGridViewTriState) As TextFormatFlags
 
         End Sub
 
-        ''' <summary>
-        ''' 列の幅が変更されたとき
-        ''' </summary>
-        ''' <param name="e"></param>
-        ''' <remarks></remarks>
-        Protected Overrides Sub OnColumnWidthChanged(ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs)
+    ''' <summary>
+    ''' 列の幅が変更されたとき
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Protected Overrides Sub OnColumnWidthChanged(ByVal e As System.Windows.Forms.DataGridViewColumnEventArgs)
             MyBase.OnColumnWidthChanged(e)
 
             Try
@@ -878,12 +941,12 @@ ByVal wrapMode As DataGridViewTriState) As TextFormatFlags
             End Try
         End Sub
 
-        ''' <summary>
-        ''' 行の境界線がダブルクリックされた時
-        ''' </summary>
-        ''' <param name="e"></param>
-        ''' <remarks></remarks>
-        Protected Overrides Sub OnRowDividerDoubleClick(ByVal e As System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs)
+    ''' <summary>
+    ''' 行の境界線がダブルクリックされた時
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Protected Overrides Sub OnRowDividerDoubleClick(ByVal e As System.Windows.Forms.DataGridViewRowDividerDoubleClickEventArgs)
             MyBase.OnRowDividerDoubleClick(e)
 
             Try
@@ -896,12 +959,12 @@ ByVal wrapMode As DataGridViewTriState) As TextFormatFlags
             End Try
         End Sub
 
-        ''' <summary>
-        ''' マウスのボタンが押された時
-        ''' </summary>
-        ''' <param name="e"></param>
-        ''' <remarks></remarks>
-        Protected Overrides Sub OnMouseDown(e As System.Windows.Forms.MouseEventArgs)
+    ''' <summary>
+    ''' マウスのボタンが押された時
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Protected Overrides Sub OnMouseDown(e As System.Windows.Forms.MouseEventArgs)
             MyBase.OnMouseDown(e)
 
             Try
@@ -912,12 +975,12 @@ ByVal wrapMode As DataGridViewTriState) As TextFormatFlags
             End Try
         End Sub
 
-        ''' <summary>
-        ''' マウスのボタンが離された時
-        ''' </summary>
-        ''' <param name="e"></param>
-        ''' <remarks></remarks>
-        Protected Overrides Sub OnMouseUp(e As System.Windows.Forms.MouseEventArgs)
+    ''' <summary>
+    ''' マウスのボタンが離された時
+    ''' </summary>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Protected Overrides Sub OnMouseUp(e As System.Windows.Forms.MouseEventArgs)
             MyBase.OnMouseUp(e)
 
             Try
@@ -930,7 +993,58 @@ ByVal wrapMode As DataGridViewTriState) As TextFormatFlags
 
 #End Region
 
+#Region "ｾﾙ結合：条件判定"
+
+    ''' <summary>
+    ''' セル結合の四隅のセルであるか判断
+    ''' </summary>
+    ''' <param name="CellRow"></param>
+    ''' <param name="CellColumn"></param>
+    ''' <param name="UnionRow"></param>
+    ''' <param name="UnionColumn"></param>
+    ''' <param name="RowSpan"></param>
+    ''' <param name="ColumnSpan"></param>
+    ''' <returns></returns>
+    Private Function CheckUnionArea(ByVal CellRow As Integer, ByVal CellColumn As Integer,
+                                                     ByVal UnionRow As Integer, ByVal UnionColumn As Integer,
+                                                     ByVal RowSpan As Integer, ByVal ColumnSpan As Integer) As Boolean
+        Dim chk As Boolean = False
+
+        If (CellRow = UnionRow OrElse CellRow = UnionRow + RowSpan - 1) AndAlso
+            (CellColumn = UnionColumn OrElse CellColumn = UnionColumn + ColumnSpan - 1) Then
+            chk = True
+        End If
+
+        Return chk
+
+
+    End Function
+
+    ''' <summary>
+    ''' 結合領域内に存在するかﾁｪｯｸ
+    ''' </summary>
+    ''' <param name="CellRow"></param>
+    ''' <param name="CellColumn"></param>
+    ''' <param name="UnionRow"></param>
+    ''' <param name="UnionColumn"></param>
+    ''' <param name="RowSpan"></param>
+    ''' <param name="ColumnSpan"></param>
+    ''' <returns></returns>
+    Private Function CheckIndex(ByVal CellRow As Integer, ByVal CellColumn As Integer,
+                                               ByVal UnionRow As Integer, ByVal UnionColumn As Integer,
+                                               ByVal RowSpan As Integer, ByVal ColumnSpan As Integer) As Boolean
+        Dim rtn As Boolean = False
+
+        For checkR = UnionRow To UnionRow + RowSpan - 1
+            For checkC = UnionColumn To UnionColumn + ColumnSpan - 1
+                If checkC = CellColumn And checkR = CellRow Then rtn = True
+            Next
+        Next
+        Return rtn
+    End Function
 
 #End Region
 
-    End Class
+#End Region
+
+End Class
